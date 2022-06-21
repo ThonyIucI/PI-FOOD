@@ -1,0 +1,16 @@
+export const POST_RECIPE = "POST_RECIPE";
+
+export const GET_RECIPES = "GET_RECIPES";
+
+export const GET_DIETS = "GET_DIETS";
+
+export const GET_RECIPE_BY_ID = "GET_RECIPE_BY_ID";
+export const GET_RECIPES_BY_NAME = "GET_RECIPES_BY_NAME";
+
+export const FILTER_BY_SEARCHBAR = "FILTER_BY_SEARCHBAR";
+export const FILTER_BY_DIET = "FILTER_BY_DIET";
+export const FILTER_BY_ID = "FILTER_BY_ID";
+
+export const ORDER_BY_ALPHABET = "FILTER_BY_ALPHABET";
+export const ORDER_BY_SCORE = "ORDER_BY_SCORE";
+export const REFRESH_PAGE = "REFRESH_PAGE";

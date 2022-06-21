@@ -17,12 +17,28 @@
 //     =====`-.____`.___ \_____/___.-`___.-'=====
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const server = require('./src/app.js');
-const { conn } = require('./src/db.js');
-
+const server = require("./src/app.js");
+const { conn, Diet } = require("./src/db.js");
+const { API_PORT } = process.env;
 // Syncing all the models at once.
-conn.sync({ force: true }).then(() => {
-  server.listen(3001, () => {
-    console.log('%s listening at 3001'); // eslint-disable-line no-console
+conn.sync({ force: false }).then(() => {
+  server.listen(API_PORT, () => {
+    console.log(`%s listening at ${API_PORT}`); // eslint-disable-line no-console
+    // const predata = [
+    //   { name: "Gluten Free" },
+    //   { name: "Ketogenic" },
+    //   { name: "Vegetarian" },
+    //   { name: "Lacto-Vegetarian" },
+    //   { name: "Ovo-Vegetarian" },
+    //   { name: "Vegan" },
+    //   { name: "Pescetarian" },
+    //   { name: "Paleo" },
+    //   { name: "Primal" },
+    //   { name: "Low FODMAP" },
+    //   { name: "Whole30" },
+    // ];
+
+    // Diet.bulkCreate(predata);
+    console.log("Diets habe been pre-loaded");
   });
 });
