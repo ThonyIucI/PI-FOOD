@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { ButtonPage, Container, ButtonPeviusNext } from "./PaginationSty";
 
 export default function Pagination({
+  currentPage,
   recipesInAPage,
   allRecipes,
   setCurrentPage,
@@ -10,25 +10,22 @@ export default function Pagination({
   for (let i = 0; i < Math.ceil(allRecipes / recipesInAPage); i++) {
     numberPage.push(i + 1);
   }
-  const [currentNumber, setCurrentNumber] = useState(1);
+
   function handleNormal(number) {
     setCurrentPage(number);
-    setCurrentNumber(number);
   }
   function handlePrevius() {
-    setCurrentPage(currentNumber - 1);
-    setCurrentNumber(currentNumber - 1);
+    setCurrentPage(currentPage - 1);
   }
   function handleNext() {
-    setCurrentPage(currentNumber + 1);
-    setCurrentNumber(currentNumber + 1);
+    setCurrentPage(currentPage + 1);
   }
 
   return (
     <Container>
       <ButtonPeviusNext
         onClick={() => handlePrevius()}
-        disabled={currentNumber === 1 ? true : false}
+        disabled={currentPage === 1 ? true : false}
       >
         &laquo;Previous
       </ButtonPeviusNext>
@@ -39,7 +36,7 @@ export default function Pagination({
       ))}
 
       <ButtonPeviusNext
-        disabled={currentNumber < numberPage.length ? false : true}
+        disabled={currentPage < numberPage.length ? false : true}
         onClick={() => handleNext()}
       >
         Next &raquo;

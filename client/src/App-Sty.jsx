@@ -1,6 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 import img from "./img/fondo.jpg";
-
+let img2 =
+  "https://i.pinimg.com/564x/01/53/c3/0153c36842b693fe6cefba5df95f6043.jpg";
 export const GlobalStyles = createGlobalStyle`
 body{
   /* Elemento de imagen */
@@ -16,6 +17,7 @@ body{
    margin: 0;
    padding: 0;
 font-family: Pacifico, sans-serif;
+text-align: center;
    
   /* Alineacion de hijos */
   display: flex;

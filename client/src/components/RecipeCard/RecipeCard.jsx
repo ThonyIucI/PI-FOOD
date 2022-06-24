@@ -30,12 +30,12 @@ export default function RecipeCard({
           alt="Cargando Imagen..."
         />
       </Link>
-      {/* <Label>ID: {id}</p> */}
+
       <Title>{name}</Title>
       <Celda>
         <Class> Diets: </Class>
         <ListContainer>
-          {diets
+          {diets && diets.length
             ? diets?.map((diet) => <Diet key={diet}>{diet}</Diet>)
             : "Diets not found"}
         </ListContainer>

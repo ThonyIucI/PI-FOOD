@@ -1,22 +1,9 @@
 import styled, { css } from "styled-components";
-import { theme } from "../Config/generales";
+import { theme, HomeBack } from "../Config/generales";
 const shadow = (size1, size2, color) => {
   return css`
     text-shadow: ${size1} 0 ${color}, ${size2} 0 ${color}, 0 ${size2} ${color},
       0 ${size1} ${color};
-  `;
-};
-const ButtonHome = (color) => {
-  return css`
-    font-family: Pacifico, sans-serif;
-    background-color: ${color};
-    border-color: white;
-    color: white;
-    &:hover {
-      background-color: ${color};
-      border-color: ${color}10;
-      color: #ffffff90;
-    }
   `;
 };
 
@@ -47,40 +34,37 @@ export const Ptitle = styled.p`
 export const ButtomsConatiner = styled.div`
   display: flex;
   align-items: center;
+  align-content: center;
   flex-direction: column-reverse;
   height: 100%;
-`;
-export const ButtomCreateR = styled.button`
-  width: 300px;
-  height: 60px;
-  font-size: 20px;
-  border-radius: 25px;
-  align-self: center;
-  font-family: Pacifico, sans-serif;
-  ${ButtonHome(theme.color.celeste)}
+  width: 35%;
 `;
 export const RefreshButton = styled.button`
-  width: 80px;
-  height: 50;
-  font-size: 20px;
+  ${HomeBack(theme.color.naranja)}
+  border-color: white;
   border-radius: 20px;
   align-self: center;
-  font-family: Pacifico, sans-serif;
-  ${ButtonHome("orange")}
+  margin: 8% 5% 4% 5%;
+`;
+export const ButtomCreateR = styled.button`
+  ${HomeBack(theme.color.verde)}
+  border-color: white;
+  width: 280px;
+  border-radius: 25px;
+  height: 60px;
+  font-size: 25px;
+  margin: 4% 5% 15% 5%;
 `;
 
 export const ContainerBody = styled.div`
-  /* position: static;*/
   padding: 10px 5% 10% 5%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  /* width: 100%; */
   margin: 1%;
   gap: 2%;
   background-color: transparent;
-  /* overflow: scroll; */
 `;
 
 export const ContainerNumber = styled.div`

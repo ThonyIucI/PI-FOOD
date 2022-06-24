@@ -3,14 +3,16 @@ import styled, { css } from "styled-components";
 export const Container = styled.div`
   /* position: fixed; */
   display: flex;
+  /* background-color: #ffffff60; */
+  /* margin: 1% 15% 1% 15%; */
   justify-content: center;
   padding: 1% 10% 1% 10%;
+  border-radius: 50px;
   top: 200px;
 `;
 const buttomPagination = css`
   border-radius: 60px;
-  padding-left: 5px;
-  padding-right: 5xp;
+  padding: 0 5px 0 5px;
   border-color: #80808020;
   text-align: center;
   color: gray;

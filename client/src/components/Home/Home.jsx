@@ -41,7 +41,7 @@ export default function Home() {
   const maxIndexRecipe = recipesInAPage * currentPage;
   const minIndexRecipe = maxIndexRecipe - recipesInAPage;
   let recipeTotal = recipesByDiets.length ? recipesByDiets : recipesFiltered;
-  let recipesShown = recipeTotal
+  let recipesShown = recipeTotal //recetas filtradas por dietas o por lo menos el string del error
     ? recipeTotal.slice(minIndexRecipe, maxIndexRecipe)
     : ["There is not recipes to show"];
 
@@ -54,13 +54,20 @@ export default function Home() {
   // useEffect(() => {
   //   recipesShown = recipesFiltered;
   // }, [recipesFiltered]);
-
+  const handleRefresh = () => {
+    dispatch(refreshPage());
+    setCurrentPage(1);
+  };
   console.log(`Número de recetas filtradas: ${recipesFiltered.length}`);
   return (
     <>
       <ContainerHead>
         <Ptitle onClick={() => history.push("/")}>Api-Food</Ptitle>
-        <SearchBar />
+        <SearchBar
+          setFilter={setFilter}
+          dispatch={dispatch}
+          setCurrentPage={setCurrentPage}
+        />
         <FilterOptions
           setFilter={setFilter}
           dispatch={dispatch}
@@ -70,19 +77,18 @@ export default function Home() {
           <ButtomCreateR onClick={(e) => history.push("/create")}>
             Create Your Own
           </ButtomCreateR>
-          <RefreshButton onClick={(e) => dispatch(refreshPage(e))}>
-            Refresh
-          </RefreshButton>
+          <RefreshButton onClick={() => handleRefresh()}>Refresh</RefreshButton>
         </ButtomsConatiner>
       </ContainerHead>
       <Pagination
         recipesInAPage={recipesInAPage}
         allRecipes={recipeTotal.length}
+        currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
 
       <ContainerBody>
-        {recipesShown.length ? (
+        {recipesShown && recipesShown.length ? (
           <>
             {typeof recipesShown[0] === "string" ? (
               <NotFound>
@@ -108,6 +114,11 @@ export default function Home() {
         ) : (
           <Loader />
         )}
+        {/* <Pagination
+          recipesInAPage={recipesInAPage}
+          allRecipes={recipeTotal.length}
+          setCurrentPage={setCurrentPage}
+        /> */}
       </ContainerBody>
     </>
   );

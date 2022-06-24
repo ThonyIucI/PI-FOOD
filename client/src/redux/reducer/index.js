@@ -22,10 +22,8 @@ const initialState = {
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case POST_RECIPE:
-      // let existRecipeName = state.allRecipes.filter(
-      //   (e) => e.name === payload.name
-      // );
-      return { ...state, detail: payload };
+      alert(payload.request.response);
+      return { ...state };
     case GET_RECIPE_BY_ID:
       return {
         ...state,
@@ -61,7 +59,9 @@ const reducer = (state = initialState, { type, payload }) => {
       );
       // console.log(`Resultado de filtrar: ${names} de tipo: ${typeof names}`);
       if (!Object.keys(names).length)
-        names = [`Any match with ${payload}, please try with another one`];
+        names = [
+          `Any match with << ${payload} >>, please try with another one`,
+        ];
       return {
         ...state,
         recipesFiltered: names,
@@ -77,8 +77,8 @@ const reducer = (state = initialState, { type, payload }) => {
         //   return d.includes(payload.toLowerCase());
         // });
         arr = state.recipesFiltered.filter((recipe) => {
-          // console.log(recipe.diets.length);
-          if (recipe.diets.length > 0) {
+          if (recipe.diets && recipe.diets.length > 0) {
+            // console.log(recipe.diets.length);
             // console.log(recipe.diets)
             if (
               recipe.diets.find(
@@ -93,7 +93,7 @@ const reducer = (state = initialState, { type, payload }) => {
       }
       if (!arr.length)
         state.recipesFiltered = [
-          `Any recipe searched is clasiffied as ${payload}, Plsease try with another type of Diet`,
+          `Any recipe searched is clasiffied as << ${payload} >>, Plsease try with another type of Diet`,
         ];
       return {
         ...state,
@@ -155,6 +155,7 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         recipesFiltered: state.allRecipes,
+        recipesByDiets: [],
       };
     default:
       return { ...state };

@@ -44,13 +44,18 @@ const getRecipesFromDb = async () => {
 //Descomentar la URL de la API
 const getRecipesFromApi = async () => {
   try {
-    // const { results } = await axios.get(
-    //   `${SPOONACULAR_URL}/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`
-    // ).data;
+    // ====Spoonacular===
+    // const { data } = await axios.get(
+    //   `${SPOONACULAR_URL}/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`);
+    // let { results } = data;
+    // ====Spoonacular===
 
+    // ====APIFAKE===
     const response = await axios(`${API_FAKE}`);
     let results = response.data;
-    console.log(results[0]);
+    // ====APIFAKE===
+
+    // console.log(results[0]);
 
     if (results.length > 0) {
       return results.map((recipe) => {
@@ -64,7 +69,9 @@ const getRecipesFromApi = async () => {
           health_score: recipe.healthScore,
           steps:
             recipe.analyzedInstructions[0] &&
-            recipe.analyzedInstructions[0].steps?.map((step) => step.step),
+            recipe.analyzedInstructions[0].steps
+              ? recipe.analyzedInstructions[0].steps?.map((step) => step.step)
+              : [],
           image: recipe.image,
           diets: recipe.diets,
           dishes: recipe.dishTypes,
@@ -97,7 +104,7 @@ const getAllRecipes = async (req, res) => {
         return res.status(404).send("Any Recipe found");
       }
     } else {
-      return res.json(recipesFound);
+      return res.status(200).json(recipesFound);
     }
   } catch (error) {
     console.log({ error: error.message });
@@ -132,11 +139,16 @@ const getIdFromDB = async (id) => {
 };
 const getIdFromApi = async (id) => {
   try {
-    // const recipe  = await axios.get(
-    //   `${SPOONACULAR_URL}/recipes/${id}/information?apiKey=${API_KEY}&addRecipeInformation=true`
-    // ).data;
-    let recipe = await axios(`${API_FAKE}/${id}`);
-    recipe = recipe.data;
+    // ====Spoonacular===
+    // const axiosRecipe = await axios(
+    //   `${SPOONACULAR_URL}/${id}/information?apiKey=${API_KEY}&addRecipeInformation=true`
+    // );
+    // const recipe = axiosRecipe.data;
+
+    // ====Spoonacular===
+    let axiosRecipe = await axios(`${API_FAKE}/${id}`);
+    let recipe = axiosRecipe.data;
+    // ====Spoonacular===
     // console.log(`Recipeeeeeeeeeeeeeeeee: ${recipe} id: ${id}`);
     if (Object.keys(recipe).length) {
       return {
@@ -183,16 +195,16 @@ const getRecipeDetail = async (req, res) => {
 const createRecipe = async (req, res) => {
   const { name, summary, health_score, steps, image, diets } = req.body;
   if (!name) {
-    return res.status(400).send({ error: "Name is required" });
+    return res.status(400).send("Name is required");
     // return res.status(400).send("Name is required");
   }
   if (!summary) {
-    return res.status(400).send({ error: "Summary is required" });
+    return res.status(400).send("Summary is required");
   }
   if (health_score < 0 || health_score > 100) {
     return res
       .status(400)
-      .send({ error: "Health Score must be an integer between 0 and 100" });
+      .send("Health Score must be an integer between 0 and 100");
   }
   let existRecipeName = await Recipe.findOne({
     where: { name: { [Op.iLike]: `${name}` } },
@@ -224,7 +236,7 @@ const createRecipe = async (req, res) => {
         .json("Imposible to create Recipe, Please enter valid information"); //----Verificar codigo de status
       //---------Agregar mensaje de error para cada caso----------
     } else {
-      res.send(`Recipe ${newRecipe.name} succesfully created`);
+      res.status(200).send(`Recipe "${newRecipe.name}" succesfully created`);
     }
   } catch (error) {
     console.log(error.message);
@@ -248,7 +260,8 @@ const createDiet = async (req, res) => {
   ];
 
   try {
-    await Diet.bulkCreate(predata);
+    let ResDieta = await Diet.bulkCreate(predata);
+
     res.send("Diets created succesfully");
   } catch (error) {
     console.log(error);
@@ -259,7 +272,7 @@ const getDiets = async (req, res) => {
     let diets = await Diet.findAll();
     // console.log("Las dietas: desde Controlers", diets);
     if (diets.length === 0) {
-      return res.status(404).send("Any Diet found");
+      return res.status(404).send("Any Diet found in Database");
     } else {
       return res.status(200).json(diets);
       // res.status(500).json({ message: error.message });

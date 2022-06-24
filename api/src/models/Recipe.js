@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
       },
       summary: { type: DataTypes.TEXT, allowNull: false }, //Resumen del plato
       health_score: { type: DataTypes.INTEGER },
-      steps: { type: DataTypes.TEXT }, //Paso a paso (preparación)
+      steps: { type: DataTypes.ARRAY(DataTypes.TEXT) }, //Paso a paso (preparación)
       image: { type: DataTypes.STRING },
     },
     { timestamps: false }

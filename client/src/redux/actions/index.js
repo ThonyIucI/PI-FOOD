@@ -13,8 +13,9 @@ import {
   REFRESH_PAGE,
 } from "./actionTypes";
 
-// const { API_SERVER } = process.env;
-const API_SERVER = "http://localhost:3001";
+const { REACT_APP_API_SERVER } = process.env;
+let API_SERVER = REACT_APP_API_SERVER;
+// const API_SERVER = "http://localhost:3001";
 
 // JUGAR CON LA LOGICA DE ESTE POST!!!!!!!!!!!============
 export function postRecipe(payload) {
@@ -34,8 +35,7 @@ export function postRecipe(payload) {
       //   payload: newRecipe.data,
       // });
     } catch (error) {
-      console.log(error.message);
-      // alert(error.response.data.message);
+      console.log(error.response.data);
     }
   };
 }
@@ -51,41 +51,38 @@ export function getRecipeById(id) {
       });
     } catch (error) {
       console.log(error.response);
-      alert(error.response.data ? error.response.data : error.response);
+      alert(
+        error.response && error.response.data
+          ? error.response.data
+          : error.message
+      );
     }
   };
 }
 export function getRecipesByName(name) {
   return async (dispatch) => {
     try {
-      await axios.get(`${API_SERVER}/recipes?name=${name}`).then((recipe) => {
-        return dispatch({
-          type: GET_RECIPES_BY_NAME,
-          payload: recipe.data,
-        });
-      });
-    } catch (error) {
-      console.log(error);
+      let recipes = await axios.get(`${API_SERVER}/recipes?name=${name}`);
+
+      console.log(recipes);
       return dispatch({
         type: GET_RECIPES_BY_NAME,
-        payload: error.response.data, //"Si es string Se mostrará el texto en la pantalla del Home"
+        payload: recipes.data,
+      });
+    } catch (error) {
+      console.log(error.response.data);
+      alert(
+        error.response && error.response.data
+          ? error.response.data
+          : error.message
+      );
+      return dispatch({
+        type: GET_RECIPES_BY_NAME,
+        payload: [error.response.data], //"Si es string Se mostrará el texto en la pantalla del Home"
       });
     }
   };
 }
-// export function getRecipesByName(name) {
-//   return async (dispatch) => {
-//     try {
-//       let recipesName = await axios.get(`${API_SERVER}/recipes?name=${name}`);
-//       return dispatch({
-//         type: GET_RECIPES_BY_NAME,
-//         payload: recipesName.data,
-//       });
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-// }
 
 export function getAllRecipes() {
   return async function (dispatch) {
@@ -96,10 +93,14 @@ export function getAllRecipes() {
           payload: recipes.data,
         });
       });
-      console.log("Soy Allrecipes y me resolví");
+      // console.log("Soy Allrecipes y me resolví");
     } catch (error) {
       console.log(error.message);
-      // alert(error.response);
+      alert(
+        error.response && error.response.data
+          ? error.response.data
+          : error.message
+      );
     }
   };
 }
@@ -115,8 +116,12 @@ export function getDiets() {
         });
       });
     } catch (error) {
-      console.log(error.message);
-      alert(error.message);
+      console.log(error);
+      alert(
+        error.response && error.response.data
+          ? error.response.data
+          : error.message
+      );
     }
   };
 }
@@ -162,9 +167,8 @@ export function orderByScore(payload) {
     payload,
   };
 }
-export function refreshPage(payload) {
+export function refreshPage() {
   return {
     type: REFRESH_PAGE,
-    payload,
   };
 }

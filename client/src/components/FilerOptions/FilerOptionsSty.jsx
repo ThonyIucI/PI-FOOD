@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import theme from "../Config/generales";
 
 export const Options = styled.div`
@@ -11,7 +11,8 @@ export const Options = styled.div`
 `;
 export const P = styled.p`
   margin: 5%;
-  font-size: 20px;
+  font-size: 25px;
+  /* font-size: 80%; */
   color: gray;
   text-align: center;
   text-shadow: -1px 0 ${theme.color.sombra};
@@ -24,12 +25,13 @@ export const OptionsContainer = styled.div`
 
 export const Select = styled.select`
   margin-left: 5%;
-  width: 30%;
+  width: 33%;
   border-radius: 5px;
   height: 36px;
   margin: 0 3% 0 3%;
   justify-content: center;
-  font-family: Arial, monospace;
+  font-family: Pacifico, monospace;
   text-align: center;
+  font-size: 85%;
   cursor: pointer;
 `;

@@ -13,14 +13,21 @@ import {
   Select,
   ButtomCreate,
   Buttomscontainer,
-  OtherBottoms,
+  HomeB,
+  BackB,
+  Refresh,
+  Header,
+  FromContainer,
+  InputTxt,
+  ShowTxt,
+  AddStep,
 } from "./FormSty";
 // import imageDefault from "../../img/default.jpg";
 import { getAllRecipes, getDiets, postRecipe } from "../../redux/actions";
 // import ChooseRecipe from "./ChooseDiet";
 // Min and Max Value accepted to Score Value ==
 let min = 0;
-let max = 100;
+let max = 101;
 // ============================================
 function nameExist(infoRecipe, allRecipes) {
   let recipeMatch = allRecipes.filter(
@@ -42,9 +49,12 @@ function validate(infoRecipe, allRecipes) {
     errors.health_score_range =
       "Health Score must be in the range from 0 to 100";
   }
-  // if (!Number.isInteger(infoRecipe.health_score)) {
-  //   errors.health_score_integer = "Health Score must be an integer number";
-  // }
+  if (
+    infoRecipe.image &&
+    !/([a-z\-_0-9\/\:\.]*\.(jpg|jpeg|png|gif))/i.test(infoRecipe.image)
+  ) {
+    errors.image = "Image must be: jpg, jpeg, png or gif";
+  }
   return errors;
 }
 // ===============================================================================
@@ -62,12 +72,13 @@ export default function CreateRecipe() {
     name: "",
     summary: "",
     health_score: 0,
-    steps: "",
+    steps: [],
     image: "",
     diets: [],
   });
-
+  const [addstep, SetAddstep] = useState("");
   const [errors, setErrors] = useState({});
+
   function handleDelete(name) {
     setInfoRecipe({
       ...infoRecipe,
@@ -83,113 +94,85 @@ export default function CreateRecipe() {
       });
     }
   }
-  function handleOnChange(e) {
+  function handlePressEnter(event) {
+    if (event.key === "Enter" || event.keyCode === 13) {
+      event.preventDefault();
+      handleAddStep();
+    }
+  }
+  function handleAddStep() {
+    if (addstep.trim() && !infoRecipe.steps.includes(addstep)) {
+      setInfoRecipe({
+        ...infoRecipe,
+        steps: [...infoRecipe.steps, addstep],
+      });
+    }
+
+    SetAddstep("");
+    // else return { ...infoRecipe };
+    // console.log(infoRecipe);
+  }
+  function handleOnChange(event) {
     setInfoRecipe({
       ...infoRecipe,
-      [e.target.name]: e.target.value,
+      [event.target.name]: event.target.value,
     });
     setErrors(
       validate(
         {
           ...infoRecipe,
-          [e.target.name]: e.target.value,
+          [event.target.name]: event.target.value,
         },
         allRecipes
       )
     );
   }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    dispatch(postRecipe(infoRecipe));
-    console.log(`Recipe: ${infoRecipe.name} have been created`);
-    history.push("/home");
+  function handleOnchangeStep(event) {
+    SetAddstep(event.target.value);
+    // console.log(infoRecipe);
   }
+  function handleSubmit(event) {
+    if (event.key === "Enter" || event.keyCode === 13) {
+      // event.preventDefault();
+      alert("not press enter or I'll break you -.- :V");
+    }
+    event.preventDefault();
+    dispatch(postRecipe(infoRecipe));
+    // alert(`Recipe: ${infoRecipe.name} have been created`);
+    // history.push("/home");
+  }
+
   function handleRefresh() {
     setInfoRecipe({
       name: "",
       summary: "",
       health_score: 0,
-      steps: "",
-      image: null,
+      steps: [],
+      image: "",
       diets: [],
     });
   }
+  // console.log(addstep);
+  // console.log(infoRecipe);
   return (
     <>
-      <Ptitle>Create a Recipe</Ptitle>
-      <Span> (Name and Summary are required)</Span>
       <form onSubmit={(e) => handleSubmit(e)}>
-        <FormGroup>
-          <Label>
-            Name:
-            <Input
-              onChange={(e) => handleOnChange(e)}
-              type="text"
-              name="name"
-            />
-            {errors && (errors.name_exist || errors.name_required) ? (
-              <Message style={{ color: "red" }}>
-                {errors.name_exist || errors.name_required}
-              </Message>
-            ) : null}
-          </Label>
-
-          <Label>
-            Summary:
-            <Input
-              onChange={(e) => handleOnChange(e)}
-              type="text"
-              name="summary"
-            />
-            {errors && errors.summary ? (
-              <Message style={{ color: "red" }}>{errors.summary}</Message>
-            ) : null}
-          </Label>
-
-          <Label>
-            Steps:
-            <Input
-              onChange={(e) => handleOnChange(e)}
-              type="text"
-              name="steps"
-            />
-          </Label>
-        </FormGroup>
-
-        <FormGroup>
-          <Label>
-            Diets:
-            <Select defaultValue="Choose Diets" onChange={(e) => handleAdd(e)}>
-              <option disabled>Choose Diets</option>
-              {diets_d?.map((diet) => (
-                <option key={`${diet.id}`} name={`${diet.name}`}>
-                  {diet.name}
-                </option>
-              ))}
-            </Select>
-            <ChooseDiet diets={infoRecipe.diets} handleDelete={handleDelete} />
-          </Label>
-
-          <Label>
-            Health Score:
-            <Input
-              onChange={(e) => handleOnChange(e)}
-              type="number"
-              name="health_score"
-            />
-            {errors && errors.health_score_range ? (
-              <Message style={{ color: "red" }}>
-                {errors.health_score_range}
-              </Message>
-            ) : null}
-          </Label>
-        </FormGroup>
-        <Buttomscontainer>
-          <OtherBottoms onClick={() => history.push("/home")}>
-            Home
-          </OtherBottoms>
-
+        <Header>
+          <Buttomscontainer>
+            <HomeB type="home" onClick={() => history.push("/home")}>
+              Home
+            </HomeB>
+            <BackB type="back" onClick={() => history.goBack()}>
+              Back
+            </BackB>
+            <Refresh type="refresh" onClick={() => handleRefresh()}>
+              Refresh
+            </Refresh>
+          </Buttomscontainer>
+          <Ptitle>
+            Create a Recipe
+            <Span> (Name and Summary are required)</Span>
+          </Ptitle>
           <ButtomCreate
             type="submit"
             disabled={
@@ -198,10 +181,120 @@ export default function CreateRecipe() {
           >
             Done!
           </ButtomCreate>
+        </Header>
 
-          <OtherBottoms onClick={() => history.goBack()}>Back</OtherBottoms>
-        </Buttomscontainer>
-        {/* <button onClick={() => handleRefresh()}>Refresh fields</button> */}
+        <FromContainer>
+          <FormGroup>
+            {/* Name */}
+            <Label>
+              Name:
+              <Input
+                onChange={(e) => handleOnChange(e)}
+                type="text"
+                name="name"
+                value={infoRecipe.name}
+                placeholder="Write a name..."
+              />
+              {errors && (errors.name_exist || errors.name_required) ? (
+                <Message style={{ color: "red" }}>
+                  {errors.name_exist || errors.name_required}
+                </Message>
+              ) : null}
+            </Label>
+
+            {/* Summary */}
+            <Label>
+              Summary:
+              <InputTxt
+                onChange={(e) => handleOnChange(e)}
+                type="text"
+                name="summary"
+                value={infoRecipe.summary}
+                placeholder="Write a Summary..."
+              />
+              {errors && errors.summary ? (
+                <Message style={{ color: "red" }}>{errors.summary}</Message>
+              ) : null}
+            </Label>
+
+            {/* Diets */}
+            <Label>
+              Diets:
+              <Select
+                defaultValue="Choose Diets"
+                onChange={(e) => handleAdd(e)}
+              >
+                <option disabled>Choose Diets</option>
+                {diets_d?.map((diet) => (
+                  <option key={`${diet.id}`} name={`${diet.name}`}>
+                    {diet.name}
+                  </option>
+                ))}
+              </Select>
+              <ChooseDiet
+                diets={infoRecipe.diets}
+                handleDelete={handleDelete}
+              />
+            </Label>
+          </FormGroup>
+
+          <FormGroup>
+            <Label>
+              Health Score:
+              <Input
+                onChange={(e) => handleOnChange(e)}
+                type="number"
+                name="health_score"
+                value={infoRecipe.health_score}
+                placeholder="Point your recipe..."
+              />
+              {errors && errors.health_score_range ? (
+                <Message style={{ color: "red" }}>
+                  {errors.health_score_range}
+                </Message>
+              ) : null}
+            </Label>
+
+            {/* Steps */}
+            <Label>
+              Steps:
+              <AddStep type="addStep" onClick={() => handleAddStep()}>
+                Add Step
+              </AddStep>
+              <Input
+                onChange={(e) => handleOnchangeStep(e)}
+                onKeyUp={(e) => handlePressEnter(e)}
+                type="text"
+                name="steps"
+                value={addstep}
+                placeholder="Detail the steps..."
+              />
+              <ShowTxt>
+                {infoRecipe.steps.map((s) => (
+                  <li
+                    style={{ color: "black" }}
+                    key={infoRecipe.steps.indexOf(s)}
+                  >
+                    {s}
+                  </li>
+                ))}
+              </ShowTxt>
+            </Label>
+            <Label>
+              Image:
+              <Input
+                onChange={(e) => handleOnChange(e)}
+                type="text"
+                name="image"
+                value={infoRecipe.image}
+                placeholder="Put an url image..."
+              />
+              {errors && errors.image ? (
+                <Message>{errors.image}</Message>
+              ) : null}
+            </Label>
+          </FormGroup>
+        </FromContainer>
       </form>
     </>
   );

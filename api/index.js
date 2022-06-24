@@ -35,7 +35,7 @@ conn.sync({ force: false }).then(() => {
     //   { name: "Paleo" },
     //   { name: "Primal" },
     //   { name: "Low FODMAP" },
-    //   { name: "Whole30" },
+    //   { name: "Whole 30" },
     // ];
 
     // Diet.bulkCreate(predata);

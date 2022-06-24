@@ -64,6 +64,8 @@ export const Dish = styled.div`
 `;
 export const Score = styled.span`
   position: absolute;
+  display: flex;
+  align-items: flex-end;
   /* top: -10px;
   right: -10px; */
   padding: 5px 10px;
@@ -71,6 +73,4 @@ export const Score = styled.span`
   /* color: transparent; */
   background: ${theme.color.rojo};
   color: white;
-  &:hover {
-  }
 `;

@@ -9,14 +9,16 @@ import RecipeDetail from "./components/RecipeDetail/RecipeDetail.jsx";
 import CreateRecipe from "./components/CreateRecipe/CreateRecipe.jsx";
 import Diets from "./components/Diets/Diets.jsx";
 import LandingPage from "./components/LandingPage/LandingPage";
+import Summary from "./components/RecipeDetail/Summary";
 function App() {
   return (
     <BrowserRouter>
       <Route exact path="/" component={LandingPage} />
       <Route path="/home" component={Home} />
-      <Route exact path="/recipes/:id" component={RecipeDetail} />
       <Route exact path="/create" component={CreateRecipe} />
       <Route path="/diets" component={Diets} />
+      <Route exact path="/recipes/:id" component={RecipeDetail} />
+      <Route path="/recipes/:id/summary" component={Summary} />
     </BrowserRouter>
   );
 }
